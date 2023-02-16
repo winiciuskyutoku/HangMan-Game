@@ -1,13 +1,11 @@
+import React from "react"
+
 
 export default function Letters(props){
 
     const upperCase = props.letter.toUpperCase()
-
-    function oi(){
-        console.log("oi")
-    }
-    
+     
     return (
-            <button className="disabled" disabled onClick={oi}>{upperCase}</button>
+        <button className={props.clickedLetter.includes(props.letter) ? "disabled" : props.disabled} disabled={props.clickedLetter.includes(props.letter) ? true : props.isTrue} onClick={() => props.onClick(props.letter)}>{upperCase}</button>
     )
 }
