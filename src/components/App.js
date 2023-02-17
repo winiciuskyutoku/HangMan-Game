@@ -25,19 +25,26 @@ function App() {
   const [word, setWord] = React.useState("")
   const [arrayWord, setArrayWord] = React.useState()
   const [arrayWordSplited, setArrayWordSplited] = React.useState()
-  const [correctWord, setCorrecWord] = React.useState()
+  const [correctWord, setCorrectWord] = React.useState()
+
+  const [status, setStatus] = React.useState("")
 
 
   function startGame() {
     setDisabled("enabled")
     setIsTrue(false)
+    setClickedLetter([])
+    setStatus("")
+    setError(0)
+    setNumMisses(forcas[0])
+
     palavras.sort(comparador)
     setWord(palavras[0])
     setArrayWord(palavras[0].split(""))
     setArrayWordSplited(palavras[0].split("").map(function (char) {
       return char = '_ ';
   }))
-    setCorrecWord(palavras[0].split("").map(function (char) {
+    setCorrectWord(palavras[0].split("").map(function (char) {
       return char = '_ ';
   }).join(""))
 
@@ -61,26 +68,35 @@ function App() {
     arrayWord.filter((e, i) => {
       if(e == id){
         arrayWordSplited.splice(i, 1, e)
-        !(arrayWordSplited.includes("_ "))? alert("voce ganhou") : console.log("a")
-        return setCorrecWord(arrayWordSplited.join(""))
+        !(arrayWordSplited.includes("_ "))? win() : console.log("a")
+        return setCorrectWord(arrayWordSplited.join(""))
       }
     })
 
     if(!(arrayWord.includes(id))){
-      const errorTimes = error + 1
-      const errorTimes2 = forcas[errorTimes]
-
-      setError(errorTimes)
-      setNumMisses(errorTimes2)
-      errorTimes === 6 ? alert("fim de jogo") : console.log(errorTimes)
+      setError(error + 1)
+      setNumMisses(forcas[error + 1])
+      error === 5 ? lose() : console.log(error)
     }
+  }
+
+  function win(){
+    setIsTrue(true)
+    setDisabled("disabled")
+    setStatus("green")
+  }
+
+  function lose(){
+    setIsTrue(true)
+    setCorrectWord(word)
+    setStatus("red")
   }
 
 
   return (
     <div className="App">
-      <Game onClick={startGame} misses={numMisses} correctWord={correctWord} isTrue={isTrue} />
-      <div className="letters">
+      <Game onClick={startGame} misses={numMisses} correctWord={correctWord} isTrue={isTrue} status={status}/>
+      <div className="letters" >
         {alfabeto.map(e => <Letters key={e} letter={e} disabled={disabled} isTrue={isTrue} onClick={countError} clickedLetter={clickedLetter} />)}
       </div>
     </div>
