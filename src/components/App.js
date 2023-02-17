@@ -19,47 +19,73 @@ function App() {
   const [disabled, setDisabled] = React.useState("disabled")
   const [error, setError] = React.useState(0)
   const [numMisses, setNumMisses] = React.useState(forcas[error])
-  const [word, setWord] = React.useState("")
   const [isTrue, setIsTrue] = React.useState(true)
   const [clickedLetter, setClickedLetter] = React.useState([])
-  const arrayWord = word.split("").map(function(char) {
-    return char = '_ ';
-  })
+
+  const [word, setWord] = React.useState("")
+  const [arrayWord, setArrayWord] = React.useState()
+  const [arrayWordSplited, setArrayWordSplited] = React.useState()
+  const [correctWord, setCorrecWord] = React.useState()
 
 
-  const correctWord = arrayWord.join("")
- 
-
-  function startGame(){
+  function startGame() {
     setDisabled("enabled")
     setIsTrue(false)
     palavras.sort(comparador)
     setWord(palavras[0])
-  } 
+    setArrayWord(palavras[0].split(""))
+    setArrayWordSplited(palavras[0].split("").map(function (char) {
+      return char = '_ ';
+  }))
+    setCorrecWord(palavras[0].split("").map(function (char) {
+      return char = '_ ';
+  }).join(""))
 
-  console.log(arrayWord)
+  }
 
-  function comparador(){
+  console.log("word", word)
+  //console.log("arrayWord", arrayWord)
+  //console.log("arrayWordSplited", arrayWordSplited)
+  //console.log("correctWord",correctWord)
+
+  function comparador() {
     return Math.random() - 0.5
   }
 
-  function countError(id){
-    setError(error + 1)
-    setNumMisses(forcas[error + 1])
-    setClickedLetter([...clickedLetter, id])  
-    error === 5 ? alert("fim de jogo") : console.log(error, numMisses)
+  
 
+  function countError(id) {
+    setClickedLetter([...clickedLetter, id])
+
+
+    arrayWord.filter((e, i) => {
+      if(e == id){
+        arrayWordSplited.splice(i, 1, e)
+        !(arrayWordSplited.includes("_ "))? alert("voce ganhou") : console.log("a")
+        return setCorrecWord(arrayWordSplited.join(""))
+      }
+    })
+
+    if(!(arrayWord.includes(id))){
+      const errorTimes = error + 1
+      const errorTimes2 = forcas[errorTimes]
+
+      setError(errorTimes)
+      setNumMisses(errorTimes2)
+      errorTimes === 6 ? alert("fim de jogo") : console.log(errorTimes)
+    }
   }
+
 
   return (
     <div className="App">
-      <Game onClick={startGame} misses={numMisses} word={word} isTrue={isTrue} correctWord={correctWord}/>
+      <Game onClick={startGame} misses={numMisses} correctWord={correctWord} isTrue={isTrue} />
       <div className="letters">
-        {alfabeto.map(e => <Letters key={e} letter={e} disabled={disabled} isTrue={isTrue} onClick={countError} clickedLetter={clickedLetter}/> )}
+        {alfabeto.map(e => <Letters key={e} letter={e} disabled={disabled} isTrue={isTrue} onClick={countError} clickedLetter={clickedLetter} />)}
       </div>
     </div>
   );
-  
+
 }
 
 export default App;

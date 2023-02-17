@@ -1,8 +1,8 @@
 
-function Game(props){
-
+function Game(props) {
+   
     return (
-        <div className="game">           
+        <div className="game">
             <img src={props.misses} />
             <div className="gamePanel">
                 <button onClick={props.onClick} disabled={props.isTrue === true ? false : true}>Escolher Palavra</button>
