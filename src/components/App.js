@@ -3,6 +3,7 @@ import Letters from "./Letters"
 import palavras from "../palavras"
 import alfabeto from "../alfabeto"
 import React from "react"
+import Guess from "./Guess"
 
 import forca0 from "../assets/forca0.png"
 import forca1 from "../assets/forca1.png"
@@ -50,11 +51,6 @@ function App() {
 
   }
 
-  console.log("word", word)
-  //console.log("arrayWord", arrayWord)
-  //console.log("arrayWordSplited", arrayWordSplited)
-  //console.log("correctWord",correctWord)
-
   function comparador() {
     return Math.random() - 0.5
   }
@@ -68,7 +64,9 @@ function App() {
     arrayWord.filter((e, i) => {
       if(e == id){
         arrayWordSplited.splice(i, 1, e)
-        !(arrayWordSplited.includes("_ "))? win() : console.log("a")
+        if(!(arrayWordSplited.includes("_ "))){
+          win()
+        }
         return setCorrectWord(arrayWordSplited.join(""))
       }
     })
@@ -76,20 +74,26 @@ function App() {
     if(!(arrayWord.includes(id))){
       setError(error + 1)
       setNumMisses(forcas[error + 1])
-      error === 5 ? lose() : console.log(error)
+      /* error === 5 ? lose() :  false */
+      if(error === 5){
+        lose()
+      }
     }
   }
 
   function win(){
     setIsTrue(true)
     setDisabled("disabled")
+    setCorrectWord(word)
     setStatus("green")
   }
 
   function lose(){
     setIsTrue(true)
     setCorrectWord(word)
+    setDisabled("disabled")
     setStatus("red")
+    setNumMisses(forcas[6])
   }
 
 
@@ -99,6 +103,7 @@ function App() {
       <div className="letters" >
         {alfabeto.map(e => <Letters key={e} letter={e} disabled={disabled} isTrue={isTrue} onClick={countError} clickedLetter={clickedLetter} />)}
       </div>
+      <Guess word={word} win={win} lose={lose} isTrue={isTrue} disabled={disabled}/>
     </div>
   );
 
