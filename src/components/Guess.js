@@ -16,11 +16,11 @@ export default function Guess(props) {
     return(
         <div className={props.word !== "" ? "Guess" : "none"}>
             <p>Já sei a palavra!</p>
-            <input 
+            <input data-test="guess-input"
             value={guess} 
             onChange={(e) => setGuess(e.target.value)}
             disabled={props.isTrue}></input>
-            <button onClick={checkValue} disabled={props.isTrue} className={props.isTrue === true ? props.disabled : "enabled"}>
+            <button data-test="guess-button"onClick={checkValue} disabled={props.isTrue} className={props.isTrue === true ? props.disabled : "enabled"}>
                 Chutar
             </button>
         </div>
